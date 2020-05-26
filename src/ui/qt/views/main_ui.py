@@ -1,7 +1,7 @@
 from PyQt5 import uic
 from PyQt5.QtWidgets import QLCDNumber
 
-from core.enum.calc_operations import CalcOperations
+from src.core.enum.calc_operations import CalcOperations
 from src.core.configs.app_configs import AppConfigs
 from src.ui.qt.views.qt_view import QtView
 
@@ -140,6 +140,7 @@ class MainUi(QtView):
     def btn_signal_clicked(self):
         self.log.info("Clicked: +-")
         self.display(self.lcdDisplay.value() * -1)
+        self.display_text = self.lcdDisplay.value()
 
     def btn_percent_clicked(self):
         self.log.info("Clicked: %")
