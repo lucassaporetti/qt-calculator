@@ -16,6 +16,7 @@ class MainUi(QtView):
         self.form.setupUi(self.window)
         # Add components {
         self.operand = 0
+        self.operand2 = 0
         self.display_text = '0'
         self.accumulated = 0
         self.waiting_digit = True
@@ -71,24 +72,28 @@ class MainUi(QtView):
         self.lcdDisplay.display(value)
 
     def calculate(self):
-        if not self.op:
+        if not self.op or not self.operand or not self.operand2:
             return
         elif self.op == CalcOperations.PERCENT:
             pass
         elif self.op == CalcOperations.SUM:
-            self.accumulated += self.operand
+            self.accumulated = self.operand + self.operand2
         elif self.op == CalcOperations.SUBTRACTION:
-            self.accumulated -= self.operand
+            self.accumulated = self.operand - self.operand2
         elif self.op == CalcOperations.MULTIPLICATION:
-            self.accumulated *= self.operand
+            self.accumulated = self.operand * self.operand2
         elif self.op == CalcOperations.DIVISION:
-            self.accumulated /= self.operand
+            self.accumulated = self.operand / self.operand2
         self.display(self.accumulated)
 
     def change_op(self, op: CalcOperations):
         self.op = op
-        self.operand = self.lcdDisplay.value()
-        if not self.waiting_digit:
+        if not self.waiting_digit and not self.operand:
+            self.operand = self.lcdDisplay.value()
+        elif not self.waiting_digit and not self.operand2:
+            self.operand2 = self.lcdDisplay.value()
+            self.calculate()
+        if not self.waiting_digit and self.operand and self.operand2:
             self.calculate()
         self.operand = self.lcdDisplay.value()
         self.wait_digit()
@@ -112,6 +117,7 @@ class MainUi(QtView):
 
     def btn_equal_clicked(self):
         self.log.info("Clicked: =")
+        self.operand2 = self.lcdDisplay.value()
         self.calculate()
         self.display_text = ''
         self.wait_digit()
@@ -119,6 +125,7 @@ class MainUi(QtView):
     def btn_ac_clicked(self):
         self.log.info("Clicked: AC")
         self.operand = 0
+        self.operand2 = 0
         self.display_text = '0'
         self.accumulated = 0
         self.waiting_digit = True
