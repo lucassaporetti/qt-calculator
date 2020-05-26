@@ -1,18 +1,10 @@
-2020-05-26 00:26:23,667 [MainThread] INFO  root::btn_ac_clicked(@Line:63) Clicked: AC 
-2020-05-26 00:26:24,711 [MainThread] INFO  root::btn_signal_clicked(@Line:66) Clicked: +- 
-2020-05-26 00:26:25,265 [MainThread] INFO  root::btn_percent_clicked(@Line:69) Clicked: % 
-2020-05-26 00:26:25,815 [MainThread] INFO  root::btn_division_clicked(@Line:72) Clicked: / 
-2020-05-26 00:26:26,779 [MainThread] INFO  root::btn_multiplication_clicked(@Line:84) Clicked: x 
-2020-05-26 00:26:27,289 [MainThread] INFO  root::btn9_clicked(@Line:81) Clicked: 9 
-2020-05-26 00:26:27,753 [MainThread] INFO  root::btn8_clicked(@Line:78) Clicked: 8 
-2020-05-26 00:26:28,311 [MainThread] INFO  root::btn7_clicked(@Line:75) Clicked: 7 
-2020-05-26 00:26:29,215 [MainThread] INFO  root::btn5_clicked(@Line:90) Clicked: 5 
-2020-05-26 00:26:29,729 [MainThread] INFO  root::btn6_clicked(@Line:93) Clicked: 6 
-2020-05-26 00:26:30,562 [MainThread] INFO  root::btn_minus_clicked(@Line:96) Clicked: - 
-2020-05-26 00:26:31,055 [MainThread] INFO  root::btn_plus_clicked(@Line:108) Clicked: + 
-2020-05-26 00:26:31,450 [MainThread] INFO  root::btn3_clicked(@Line:105) Clicked: 3 
-2020-05-26 00:26:31,867 [MainThread] INFO  root::btn2_clicked(@Line:102) Clicked: 2 
-2020-05-26 00:26:32,268 [MainThread] INFO  root::btn1_clicked(@Line:99) Clicked: 1 
-2020-05-26 00:26:32,835 [MainThread] INFO  root::btn0_clicked(@Line:111) Clicked: 0 
-2020-05-26 00:26:33,311 [MainThread] INFO  root::btn_comma_clicked(@Line:114) Clicked: , 
-2020-05-26 00:26:33,776 [MainThread] INFO  root::btn_equal_clicked(@Line:117) Clicked: = 
+2020-05-26 01:54:38,858 [MainThread] INFO  root::btn1_clicked(@Line:160) Clicked: 1 
+2020-05-26 01:54:39,296 [MainThread] INFO  root::btn0_clicked(@Line:176) Clicked: 0 
+2020-05-26 01:54:41,516 [MainThread] INFO  root::btn_plus_clicked(@Line:172) Clicked: + 
+2020-05-26 01:54:43,816 [MainThread] INFO  root::btn5_clicked(@Line:148) Clicked: 5 
+2020-05-26 01:54:45,187 [MainThread] INFO  root::btn_equal_clicked(@Line:183) Clicked: = 
+2020-05-26 01:54:45,187 [MainThread] INFO  root::calculate_and_display(@Line:72) Calculating 10 + 5 
+2020-05-26 01:54:50,620 [MainThread] INFO  root::btn_division_clicked(@Line:124) Clicked: / 
+2020-05-26 01:54:50,620 [MainThread] INFO  root::calculate_and_display(@Line:72) Calculating 15 / 5 
+2020-05-26 01:54:51,422 [MainThread] INFO  root::btn3_clicked(@Line:168) Clicked: 3 
+2020-05-26 01:55:06,180 [MainThread] INFO  root::btn_ac_clicked(@Line:106) Clicked: AC 
