@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class CalcOperations(Enum):
-    NONE = ''
+    NO_OP = None
     PERCENT = '%'
     DIVISION = '/'
     MULTIPLICATION = 'x'

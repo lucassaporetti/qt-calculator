@@ -16,9 +16,9 @@ class MainUi(QtView):
         self.form.setupUi(self.window)
         # Add components {
         self.num_operand = 0
-        self.str_operand = '0'
-        self.op = CalcOperations.NONE
-        self.result = 0
+        self.second_operand = 0
+        self.display_text = '0'
+        self.op = CalcOperations.NO_OP
         self.lcdDisplay = self.qt.find_widget(self.window, QLCDNumber, 'lcdDisplay')
         self.btnAC = self.qt.find_tool_button('btnAC')
         self.btnSignal = self.qt.find_tool_button('btnSignal')
@@ -66,54 +66,49 @@ class MainUi(QtView):
     def show(self):
         self.window.show()
 
-    def calculate_and_display(self):
-        if self.op == CalcOperations.NONE:
+    def calculate(self):
+        self.second_operand = float(self.display_text) if self.display_text else ''
+        if not self.op or not self.second_operand:
             return
-        self.log.info('Calculating {} {} {}'.format(self.result, self.op.value, self.str_operand))
-        if self.op == CalcOperations.PERCENT:
+        elif self.op == CalcOperations.PERCENT:
             pass
-        elif self.op == CalcOperations.DIVISION:
-            if self.num_operand != 0:
-                self.result /= self.num_operand
-            else:
-                self.log.info('Division by zero -> infinite result')
-        elif self.op == CalcOperations.MULTIPLICATION:
-            self.result *= self.num_operand
-        elif self.op == CalcOperations.SUBTRACTION:
-            self.result -= self.num_operand
         elif self.op == CalcOperations.SUM:
-            self.result += self.num_operand
-        self.lcdDisplay.display(self.result)
+            self.num_operand += self.second_operand
+        elif self.op == CalcOperations.SUBTRACTION:
+            self.num_operand -= self.second_operand
+        elif self.op == CalcOperations.MULTIPLICATION:
+            self.num_operand *= self.second_operand
+        elif self.op == CalcOperations.DIVISION:
+            self.num_operand /= self.second_operand
+        self.update_display()
 
     def append_digit(self, digit: int, set_flag: bool = False):
-        if self.num_operand == 0 or set_flag:
-            self.str_operand = str(digit)
+        if self.display_text == '0' or set_flag:
+            self.display_text = str(digit)
         else:
-            self.str_operand += str(digit)
-        self.num_operand = int(self.str_operand)
-        self.lcdDisplay.display(self.str_operand)
+            self.display_text += str(digit)
+        self.lcdDisplay.display(self.display_text)
 
     def change_op(self, op: CalcOperations):
         self.op = op
-        if self.result == 0:
-            self.result = self.num_operand
-            self.num_operand = 0
-            self.str_operand = '0'
-        else:
-            self.calculate_and_display()
+        self.calculate()
+        self.display_text = ''
+
+    def update_display(self):
+        self.lcdDisplay.display(self.num_operand)
 
     def btn_ac_clicked(self):
         self.log.info("Clicked: AC")
-        self.op = CalcOperations.NONE
-        self.result = 0
         self.num_operand = 0
-        self.str_operand = '0'
-        self.lcdDisplay.display(self.result)
+        self.second_operand = 0
+        self.display_text = '0'
+        self.op = CalcOperations.NO_OP
+        self.update_display()
 
     def btn_signal_clicked(self):
         self.log.info("Clicked: +-")
-        self.num_operand = int(self.lcdDisplay.value()) * -1
-        self.str_operand = str(self.num_operand)
+        self.num_operand = self.lcdDisplay.value() * -1
+        self.display_text = str(self.num_operand)
         self.append_digit(self.num_operand, True)
 
     def btn_percent_clicked(self):
@@ -181,4 +176,14 @@ class MainUi(QtView):
 
     def btn_equal_clicked(self):
         self.log.info("Clicked: =")
-        self.calculate_and_display()
+        self.display_text = self.select_operand()
+        self.calculate()
+        self.display_text = ''
+
+    def select_operand(self) -> str:
+        if not self.display_text and self.second_operand:
+            return str(self.second_operand)
+        elif not self.display_text and not self.second_operand:
+            return str(self.lcdDisplay.value())
+        else:
+            return self.display_text
