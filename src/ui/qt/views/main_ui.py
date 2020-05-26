@@ -77,7 +77,7 @@ class MainUi(QtView):
         if not self.op or not self.operand or not self.operand2:
             return
         elif self.op == CalcOperations.PERCENT:
-            pass
+            self.accumulated = self.percent()
         elif self.op == CalcOperations.SUM:
             self.accumulated = self.operand + self.operand2
         elif self.op == CalcOperations.SUBTRACTION:
@@ -147,6 +147,10 @@ class MainUi(QtView):
     def btn_percent_clicked(self):
         self.log.info("Clicked: %")
         self.change_op(CalcOperations.PERCENT)
+
+    def percent(self):
+        percent = lambda part, whole: float(whole) / 100 * float(part)
+        return percent(self.operand, self.operand2)
 
     def btn_division_clicked(self):
         self.log.info("Clicked: /")
