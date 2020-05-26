@@ -85,17 +85,18 @@ class MainUi(QtView):
         elif self.op == CalcOperations.DIVISION:
             self.accumulated = self.operand / self.operand2
         self.display(self.accumulated)
+        self.waiting_digit = False
 
     def change_op(self, op: CalcOperations):
         self.op = op
-        if not self.waiting_digit and not self.operand:
+        if not self.operand and not self.waiting_digit:
             self.operand = self.lcdDisplay.value()
-        elif not self.waiting_digit and not self.operand2:
+        elif not self.operand2 and not self.waiting_digit:
             self.operand2 = self.lcdDisplay.value()
             self.calculate()
-        if not self.waiting_digit and self.operand and self.operand2:
-            self.calculate()
-        self.operand = self.lcdDisplay.value()
+            self.operand = self.accumulated
+            self.display_text = ''
+            self.operand2 = 0
         self.wait_digit()
 
     def wait_digit(self):
@@ -117,10 +118,13 @@ class MainUi(QtView):
 
     def btn_equal_clicked(self):
         self.log.info("Clicked: =")
-        self.operand2 = self.lcdDisplay.value()
+        if self.waiting_digit:
+            self.operand2 = self.lcdDisplay.value()
+        else:
+            self.operand2 = float(self.display_text) if self.display_text else self.operand2
         self.calculate()
+        self.operand = self.accumulated
         self.display_text = ''
-        self.wait_digit()
 
     def btn_ac_clicked(self):
         self.log.info("Clicked: AC")
