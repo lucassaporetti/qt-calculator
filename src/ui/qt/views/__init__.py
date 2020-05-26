@@ -4,5 +4,5 @@
 
 __all__ = [
   "qt_view",
-  "main_menu_ui"
+  "main_ui"
 ]

@@ -1,13 +1,13 @@
 
 from PyQt5.QtWidgets import QApplication
 
-from src.ui.qt.views.main_menu_ui import MainMenuUi
+from src.ui.qt.views.main_ui import MainUi
 
 
 class QtCalculator:
     def __init__(self):
         self.app = QApplication([])
-        self.ui = MainMenuUi()
+        self.ui = MainUi()
 
     def run(self):
         self.ui.show()
