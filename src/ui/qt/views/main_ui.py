@@ -5,6 +5,8 @@ from src.core.enum.calc_operations import CalcOperations
 from src.core.configs.app_configs import AppConfigs
 from src.ui.qt.views.qt_view import QtView
 
+DECIMAL_SEPARATOR = '.'
+
 
 class MainUi(QtView):
     form, window = uic \
@@ -204,3 +206,8 @@ class MainUi(QtView):
 
     def btn_comma_clicked(self):
         self.log.info("Clicked: ,")
+        if DECIMAL_SEPARATOR not in self.display_text:
+            self.display_text += DECIMAL_SEPARATOR
+        if self.accumulated:
+            self.display_text = '0.'
+        self.lcdDisplay.display(self.display_text)
