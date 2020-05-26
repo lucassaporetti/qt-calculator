@@ -10,6 +10,18 @@
     <height>287</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>182</width>
+    <height>287</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>182</width>
+    <height>287</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Calculator</string>
   </property>
@@ -62,7 +74,7 @@ color: rgb(0, 0, 0);</string>
        <widget class="QLCDNumber" name="lcdDisplay">
         <property name="minimumSize">
          <size>
-          <width>0</width>
+          <width>180</width>
           <height>60</height>
          </size>
         </property>
@@ -84,7 +96,7 @@ font: 75 16pt &quot;Sawasdee&quot;;</string>
          <number>0</number>
         </property>
         <property name="digitCount">
-         <number>10</number>
+         <number>8</number>
         </property>
         <property name="segmentStyle">
          <enum>QLCDNumber::Flat</enum>
@@ -132,7 +144,7 @@ font: 75 16pt &quot;Sawasdee&quot;;</string>
            <property name="styleSheet">
             <string notr="true">background-color: rgb(253, 128, 8);
 color: rgb(255, 255, 255);
-font: 75 16pt &quot;Sawasdee&quot;;</string>
+font: 75 16pt &quot;Arial&quot;;</string>
            </property>
            <property name="text">
             <string>/</string>
@@ -151,7 +163,7 @@ font: 75 16pt &quot;Sawasdee&quot;;</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(85, 87, 83);</string>
            </property>
@@ -172,7 +184,7 @@ background-color: rgb(85, 87, 83);</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(85, 87, 83);</string>
            </property>
@@ -195,7 +207,7 @@ background-color: rgb(85, 87, 83);</string>
            <property name="styleSheet">
             <string notr="true">background-color: rgb(253, 128, 8);
 color: rgb(255, 255, 255);
-font: 75 16pt &quot;Sawasdee&quot;;</string>
+font: 75 16pt &quot;Arial&quot;;</string>
            </property>
            <property name="text">
             <string>x</string>
@@ -214,7 +226,7 @@ font: 75 16pt &quot;Sawasdee&quot;;</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(85, 87, 83);</string>
            </property>
@@ -232,7 +244,7 @@ background-color: rgb(85, 87, 83);</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(85, 87, 83);</string>
            </property>
@@ -253,7 +265,7 @@ background-color: rgb(85, 87, 83);</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(46, 52, 54);</string>
            </property>
@@ -274,7 +286,7 @@ background-color: rgb(46, 52, 54);</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(85, 87, 83);</string>
            </property>
@@ -297,7 +309,7 @@ background-color: rgb(85, 87, 83);</string>
            <property name="styleSheet">
             <string notr="true">background-color: rgb(253, 128, 8);
 color: rgb(255, 255, 255);
-font: 75 16pt &quot;Sawasdee&quot;;</string>
+font: 75 16pt &quot;Arial&quot;;</string>
            </property>
            <property name="text">
             <string>-</string>
@@ -316,7 +328,7 @@ font: 75 16pt &quot;Sawasdee&quot;;</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(85, 87, 83);</string>
            </property>
@@ -337,7 +349,7 @@ background-color: rgb(85, 87, 83);</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(46, 52, 54);</string>
            </property>
@@ -358,7 +370,7 @@ background-color: rgb(46, 52, 54);</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(85, 87, 83);</string>
            </property>
@@ -381,7 +393,7 @@ background-color: rgb(85, 87, 83);</string>
            <property name="styleSheet">
             <string notr="true">background-color: rgb(253, 128, 8);
 color: rgb(255, 255, 255);
-font: 75 16pt &quot;Sawasdee&quot;;</string>
+font: 75 16pt &quot;Arial&quot;;</string>
            </property>
            <property name="text">
             <string>=</string>
@@ -400,7 +412,7 @@ font: 75 16pt &quot;Sawasdee&quot;;</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(85, 87, 83);</string>
            </property>
@@ -421,7 +433,7 @@ background-color: rgb(85, 87, 83);</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(85, 87, 83);</string>
            </property>
@@ -442,7 +454,7 @@ background-color: rgb(85, 87, 83);</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(85, 87, 83);</string>
            </property>
@@ -463,7 +475,7 @@ background-color: rgb(85, 87, 83);</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 16pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(85, 87, 83);</string>
            </property>
@@ -486,7 +498,7 @@ background-color: rgb(85, 87, 83);</string>
            <property name="styleSheet">
             <string notr="true">background-color: rgb(253, 128, 8);
 color: rgb(255, 255, 255);
-font: 75 16pt &quot;Sawasdee&quot;;</string>
+font: 75 16pt &quot;Arial&quot;;</string>
            </property>
            <property name="text">
             <string>+</string>
@@ -505,7 +517,7 @@ font: 75 16pt &quot;Sawasdee&quot;;</string>
             </size>
            </property>
            <property name="styleSheet">
-            <string notr="true">font: 75 16pt &quot;Sawasdee&quot;;
+            <string notr="true">font: 75 14pt &quot;Arial&quot;;
 color: rgb(238, 238, 236);
 background-color: rgb(46, 52, 54);</string>
            </property>
