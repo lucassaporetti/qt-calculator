@@ -1,9 +1,10 @@
+
 from PyQt5.QtWidgets import QApplication
 
-from ui.qt.views.main_menu_ui import MainMenuUi
+from src.ui.qt.views.main_menu_ui import MainMenuUi
 
 
-class CarRentalQt:
+class QtCalculator:
     def __init__(self):
         self.app = QApplication([])
         self.ui = MainMenuUi()

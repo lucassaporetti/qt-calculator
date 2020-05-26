@@ -5,5 +5,5 @@
 __all__ = [
   "forms",
   "views",
-  "car_rental_qt"
+  "qt_calculator"
 ]
