@@ -95,10 +95,10 @@ class MainUi(QtView):
 
     def display(self, value):
         future_digits = len(str(value)) if value else 0
-        digits = self.lcdDisplay.digitCount()
+        digits = len(str(self.lcdDisplay.value))
         if future_digits > digits:
             self.lcdDisplay.setDigitCount(min(future_digits, MAX_DIGITS))
-        elif future_digits < digits:
+        elif future_digits <= digits:
             self.lcdDisplay.setDigitCount(max(future_digits, MIN_DIGITS))
         self.lcdDisplay.display(value)
 
