@@ -12,7 +12,7 @@ from src.ui.qt.promotions.calc_frame import CalcFrame
 
 DECIMAL_SEPARATOR = '.'
 MIN_DIGITS = 8
-MAX_DIGITS = 12
+MAX_DIGITS = 15
 
 
 class MainUi(QtView):
@@ -130,12 +130,14 @@ class MainUi(QtView):
             self.btn_equal_clicked()
         elif Qt.Key_Backspace == key_pressed:
             self.remove_digit()
+        elif Qt.Key_Period == key_pressed or Qt.Key_Comma == key_pressed:
+            self.btn_signal_clicked()
         elif Qt.Key_Escape == key_pressed:
             self.btn_ac_clicked()
 
     def display(self, value):
         future_digits = len(str(value)) if value else 0
-        digits = len(str(self.lcdDisplay.value))
+        digits = self.lcdDisplay.digitCount()
         if future_digits > digits:
             self.lcdDisplay.setDigitCount(min(future_digits, MAX_DIGITS))
         elif future_digits <= digits:
@@ -214,8 +216,9 @@ class MainUi(QtView):
             self.operand2 = self.last_operand
         elif self.wait_operand2:
             self.operand2 = self.lcdDisplay.value()
-        self.calculate()
-        self.soft_reset()
+        if self.operand and self.operand2:
+            self.calculate()
+            self.soft_reset()
         self.blink_lcd()
 
     def btn_ac_clicked(self):
@@ -233,7 +236,7 @@ class MainUi(QtView):
     def btn_signal_clicked(self):
         self.log.info("Clicked: +-")
         self.display(self.lcdDisplay.value() * -1)
-        self.display_text = self.lcdDisplay.value()
+        self.display_text = str(self.lcdDisplay.value())
 
     def btn_percent_clicked(self):
         self.log.info("Clicked: %")
