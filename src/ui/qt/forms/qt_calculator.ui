@@ -98,9 +98,6 @@ font: 75 16pt &quot;Sawasdee&quot;;</string>
         <property name="lineWidth">
          <number>0</number>
         </property>
-        <property name="smallDecimalPoint">
-         <bool>true</bool>
-        </property>
         <property name="digitCount">
          <number>8</number>
         </property>
