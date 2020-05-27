@@ -177,7 +177,7 @@ class MainUi(QtView):
         self.display(self.display_text)
 
     def calculate(self):
-        result = None
+        result = 0
         if not self.op or not self.operand:
             return
         elif self.op == CalcOperations.SUM:
@@ -216,9 +216,8 @@ class MainUi(QtView):
             self.operand2 = self.last_operand
         elif self.wait_operand2:
             self.operand2 = self.lcdDisplay.value()
-        if self.operand and self.operand2:
-            self.calculate()
-            self.soft_reset()
+        self.calculate()
+        self.soft_reset()
         self.blink_lcd()
 
     def btn_ac_clicked(self):
