@@ -94,6 +94,12 @@ class MainUi(QtView):
         self.window.show()
 
     def display(self, value):
+        future_digits = len(str(value)) if value else 0
+        digits = self.lcdDisplay.digitCount()
+        if future_digits > digits:
+            self.lcdDisplay.setDigitCount(min(future_digits, MAX_DIGITS))
+        elif future_digits < digits:
+            self.lcdDisplay.setDigitCount(max(future_digits, MIN_DIGITS))
         self.lcdDisplay.display(value)
 
     def blink_lcd(self):
@@ -112,15 +118,10 @@ class MainUi(QtView):
 
     def append_digit(self, digit: int):
         self.btnAC.setText('C')
-        digits = self.lcdDisplay.digitCount()
         if not self.display_text or self.display_text == '0':
             self.display_text = str(digit)
         else:
             self.display_text += str(digit)
-        if len(self.display_text) > digits and digits < MAX_DIGITS:
-            self.lcdDisplay.setDigitCount(digits + 1)
-        elif len(self.display_text) < digits and digits > MIN_DIGITS:
-            self.lcdDisplay.setDigitCount(digits - 1)
         self.display(self.display_text)
 
     def calculate(self):
