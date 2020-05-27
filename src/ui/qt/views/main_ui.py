@@ -42,6 +42,7 @@ class MainUi(QtView):
         self.operand = 0
         self.operand2 = 0
         self.last_operand = 0
+        self.memory_rec = 0
         self.display_text = ''
         self.op = CalcOperations.NO_OP
         self.lcdDisplay = self.qt.find_widget(self.window, QLCDNumber, 'lcdDisplay')
@@ -62,7 +63,7 @@ class MainUi(QtView):
         self.btn3 = self.qt.find_tool_button('btn3')
         self.btnPlus = self.qt.find_tool_button('btnPlus')
         self.btn0 = self.qt.find_tool_button('btn0')
-        self.btnComma = self.qt.find_tool_button('btnComma')
+        self.btnDecimal = self.qt.find_tool_button('btnDecimal')
         self.btnEqual = self.qt.find_tool_button('btnEqual')
         # }
         self.setup_ui()
@@ -85,7 +86,8 @@ class MainUi(QtView):
         self.btn3.clicked.connect(self.btn3_clicked)
         self.btnPlus.clicked.connect(self.btn_plus_clicked)
         self.btn0.clicked.connect(self.btn0_clicked)
-        self.btnComma.clicked.connect(self.btn_comma_clicked)
+        self.btnDecimal.clicked.connect(self.btn_comma_clicked)
+        self.btnDecimal.setText(DECIMAL_SEPARATOR)
         self.btnEqual.clicked.connect(self.btn_equal_clicked)
 
     def show(self):
@@ -105,9 +107,11 @@ class MainUi(QtView):
         self.last_operand = self.operand2
         self.operand = 0
         self.operand2 = 0
+        self.memory_rec = 0
         self.display_text = ''
 
     def append_digit(self, digit: int):
+        self.btnAC.setText('C')
         digits = self.lcdDisplay.digitCount()
         if not self.display_text or self.display_text == '0':
             self.display_text = str(digit)
@@ -123,8 +127,6 @@ class MainUi(QtView):
         result = None
         if not self.op or not self.operand or not self.operand2:
             return
-        elif self.op == CalcOperations.PERCENT:
-            pass
         elif self.op == CalcOperations.SUM:
             result = self.operand + self.operand2
         elif self.op == CalcOperations.SUBTRACTION:
@@ -134,11 +136,13 @@ class MainUi(QtView):
         elif self.op == CalcOperations.DIVISION:
             result = self.operand / self.operand2
         self.display(result)
+        self.memory_rec = 0
 
     def change_op(self, op: CalcOperations):
         self.op = op
         if self.wait_operand:
             self.operand = self.lcdDisplay.value()
+            self.memory_rec = self.operand
             self.wait_operand = False
         elif self.wait_operand2:
             self.operand2 = self.lcdDisplay.value()
@@ -162,9 +166,13 @@ class MainUi(QtView):
 
     def btn_ac_clicked(self):
         self.log.info("Clicked: AC")
-        self.lcdDisplay.setDigitCount(MIN_DIGITS)
-        self.display(0)
-        self.soft_reset()
+        if self.memory_rec:
+            self.memory_rec = 0
+        else:
+            self.lcdDisplay.setDigitCount(MIN_DIGITS)
+            self.display(0)
+            self.soft_reset()
+            self.btnAC.setText('AC')
         self.blink_lcd()
 
     def btn_signal_clicked(self):
@@ -174,7 +182,14 @@ class MainUi(QtView):
 
     def btn_percent_clicked(self):
         self.log.info("Clicked: %")
-        self.change_op(CalcOperations.PERCENT)
+        if not self.memory_rec:
+            self.display(self.lcdDisplay.value() / 100)
+        else:
+            operand1 = self.memory_rec
+            operand2 = self.lcdDisplay.value()
+            self.display(operand1 * (operand2/100))
+        self.display_text = self.lcdDisplay.value()
+        self.memory_rec = self.lcdDisplay.value()
 
     def btn_division_clicked(self):
         self.log.info("Clicked: /")
