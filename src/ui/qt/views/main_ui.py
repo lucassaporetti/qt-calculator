@@ -2,11 +2,13 @@ from threading import Thread
 from time import sleep
 
 from PyQt5 import uic
+from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QLCDNumber
 
 from src.core.configs.app_configs import AppConfigs
 from src.core.enum.calc_operations import CalcOperations
 from src.ui.qt.views.qt_view import QtView
+from src.ui.qt.promotions.calc_frame import CalcFrame
 
 DECIMAL_SEPARATOR = '.'
 MIN_DIGITS = 8
@@ -45,6 +47,7 @@ class MainUi(QtView):
         self.memory_rec = 0
         self.display_text = ''
         self.op = CalcOperations.NO_OP
+        self.frameMain = self.qt.find_widget(self.window, CalcFrame, 'frameMain')
         self.lcdDisplay = self.qt.find_widget(self.window, QLCDNumber, 'lcdDisplay')
         self.btnAC = self.qt.find_tool_button('btnAC')
         self.btnSignal = self.qt.find_tool_button('btnSignal')
@@ -89,9 +92,46 @@ class MainUi(QtView):
         self.btnDecimal.clicked.connect(self.btn_comma_clicked)
         self.btnDecimal.setText(DECIMAL_SEPARATOR)
         self.btnEqual.clicked.connect(self.btn_equal_clicked)
+        self.frameMain.keyPressed.connect(self.key_pressed)
 
     def show(self):
         self.window.show()
+
+    def key_pressed(self, key_pressed):
+        if Qt.Key_1 == key_pressed:
+            self.btn1_clicked()
+        elif Qt.Key_2 == key_pressed:
+            self.btn2_clicked()
+        elif Qt.Key_3 == key_pressed:
+            self.btn3_clicked()
+        elif Qt.Key_4 == key_pressed:
+            self.btn4_clicked()
+        elif Qt.Key_5 == key_pressed:
+            self.btn5_clicked()
+        elif Qt.Key_6 == key_pressed:
+            self.btn6_clicked()
+        elif Qt.Key_7 == key_pressed:
+            self.btn7_clicked()
+        elif Qt.Key_8 == key_pressed:
+            self.btn8_clicked()
+        elif Qt.Key_9 == key_pressed:
+            self.btn9_clicked()
+        elif Qt.Key_0 == key_pressed:
+            self.btn0_clicked()
+        elif Qt.Key_Plus == key_pressed:
+            self.btn_plus_clicked()
+        elif Qt.Key_Minus == key_pressed:
+            self.btn_minus_clicked()
+        elif Qt.Key_Slash == key_pressed:
+            self.btn_division_clicked()
+        elif Qt.Key_Percent == key_pressed:
+            self.btn_percent_clicked()
+        elif Qt.Key_Equal == key_pressed or Qt.Key_Return == key_pressed:
+            self.btn_equal_clicked()
+        elif Qt.Key_Backspace == key_pressed:
+            self.remove_digit()
+        elif Qt.Key_Escape == key_pressed:
+            self.btn_ac_clicked()
 
     def display(self, value):
         future_digits = len(str(value)) if value else 0
@@ -124,9 +164,19 @@ class MainUi(QtView):
             self.display_text += str(digit)
         self.display(self.display_text)
 
+    def remove_digit(self):
+        if not self.display_text:
+            return
+        elif len(self.display_text) <= 1:
+            self.btn_ac_clicked()
+            return
+        else:
+            self.display_text = self.display_text[:-1]
+        self.display(self.display_text)
+
     def calculate(self):
         result = None
-        if not self.op or not self.operand or not self.operand2:
+        if not self.op or not self.operand:
             return
         elif self.op == CalcOperations.SUM:
             result = self.operand + self.operand2
@@ -135,7 +185,10 @@ class MainUi(QtView):
         elif self.op == CalcOperations.MULTIPLICATION:
             result = self.operand * self.operand2
         elif self.op == CalcOperations.DIVISION:
-            result = self.operand / self.operand2
+            if self.operand2 == 0:
+                result = 'oo'
+            else:
+                result = self.operand / self.operand2
         self.display(result)
         self.memory_rec = 0
 
@@ -174,6 +227,7 @@ class MainUi(QtView):
             self.display(0)
             self.soft_reset()
             self.btnAC.setText('AC')
+        self.display_text = ''
         self.blink_lcd()
 
     def btn_signal_clicked(self):

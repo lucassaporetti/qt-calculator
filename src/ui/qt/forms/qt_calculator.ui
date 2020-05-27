@@ -50,7 +50,7 @@ color: rgb(0, 0, 0);</string>
     <number>0</number>
    </property>
    <item>
-    <widget class="QFrame" name="frame_2">
+    <widget class="CalcFrame" name="frameMain">
      <property name="frameShape">
       <enum>QFrame::StyledPanel</enum>
      </property>
@@ -545,6 +545,14 @@ background-color: rgb(46, 52, 54);</string>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>CalcFrame</class>
+   <extends>QFrame</extends>
+   <header location="global">src.ui.qt.promotions.calc_frame</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>btnAC</tabstop>
   <tabstop>btnSignal</tabstop>
