@@ -1,27 +1,48 @@
+from threading import Thread
+from time import sleep
+
 from PyQt5 import uic
 from PyQt5.QtWidgets import QLCDNumber
 
-from src.core.enum.calc_operations import CalcOperations
 from src.core.configs.app_configs import AppConfigs
+from src.core.enum.calc_operations import CalcOperations
 from src.ui.qt.views.qt_view import QtView
 
 DECIMAL_SEPARATOR = '.'
+MIN_DIGITS = 8
+MAX_DIGITS = 12
 
 
 class MainUi(QtView):
     form, window = uic \
         .loadUiType("{}/ui/qt/forms/qt_calculator.ui".format(AppConfigs.root_dir()))
 
+    class BlinkLcdThread(Thread):
+        def __init__(self, lcd: QLCDNumber):
+            Thread.__init__(self)
+            self.lcd = lcd
+
+        def run(self):
+            palette = self.lcd.palette()
+            fg_color = palette.color(palette.WindowText)
+            bg_color = palette.color(palette.Background)
+            palette.setColor(palette.WindowText, bg_color)
+            self.lcd.setPalette(palette)
+            sleep(0.1)
+            palette.setColor(palette.WindowText, fg_color)
+            self.lcd.setPalette(palette)
+
     def __init__(self):
         super().__init__(MainUi.window())
         self.form = MainUi.form()
         self.form.setupUi(self.window)
         # Add components {
+        self.wait_operand = True
+        self.wait_operand2 = True
         self.operand = 0
         self.operand2 = 0
-        self.display_text = '0'
-        self.accumulated = 0
-        self.waiting_digit = True
+        self.last_operand = 0
+        self.display_text = ''
         self.op = CalcOperations.NO_OP
         self.lcdDisplay = self.qt.find_widget(self.window, QLCDNumber, 'lcdDisplay')
         self.btnAC = self.qt.find_tool_button('btnAC')
@@ -73,71 +94,78 @@ class MainUi(QtView):
     def display(self, value):
         self.lcdDisplay.display(value)
 
-    def calculate(self):
-        if not self.op or not self.operand or not self.operand2:
-            return
-        elif self.op == CalcOperations.PERCENT:
-            self.accumulated = self.percent()
-        elif self.op == CalcOperations.SUM:
-            self.accumulated = self.operand + self.operand2
-        elif self.op == CalcOperations.SUBTRACTION:
-            self.accumulated = self.operand - self.operand2
-        elif self.op == CalcOperations.MULTIPLICATION:
-            self.accumulated = self.operand * self.operand2
-        elif self.op == CalcOperations.DIVISION:
-            self.accumulated = self.operand / self.operand2
-        self.display(self.accumulated)
-        self.waiting_digit = False
-
-    def change_op(self, op: CalcOperations):
-        self.op = op
-        if not self.operand and not self.waiting_digit:
-            self.operand = self.lcdDisplay.value()
-        elif not self.operand2 and not self.waiting_digit:
-            self.operand2 = self.lcdDisplay.value()
-            self.calculate()
-            self.operand = self.accumulated
-            self.display_text = ''
-            self.operand2 = 0
-        self.wait_digit()
-
-    def wait_digit(self):
+    def blink_lcd(self):
+        blink = MainUi.BlinkLcdThread(self.lcdDisplay)
+        blink.start()
         self.display_text = ''
-        self.waiting_digit = True
 
-    def append_digit(self, digit: int, set_flag: bool = False):
+    def soft_reset(self):
+        self.wait_operand = True
+        self.wait_operand2 = True
+        self.last_operand = self.operand2
+        self.operand = 0
+        self.operand2 = 0
+        self.display_text = ''
+
+    def append_digit(self, digit: int):
         digits = self.lcdDisplay.digitCount()
-        if self.display_text == '0' or set_flag:
+        if not self.display_text or self.display_text == '0':
             self.display_text = str(digit)
         else:
             self.display_text += str(digit)
-        if len(self.display_text) > digits and digits < 12:
+        if len(self.display_text) > digits and digits < MAX_DIGITS:
             self.lcdDisplay.setDigitCount(digits + 1)
-        elif len(self.display_text) < digits and digits > 8:
+        elif len(self.display_text) < digits and digits > MIN_DIGITS:
             self.lcdDisplay.setDigitCount(digits - 1)
         self.display(self.display_text)
-        self.waiting_digit = False
+
+    def calculate(self):
+        result = None
+        if not self.op or not self.operand or not self.operand2:
+            return
+        elif self.op == CalcOperations.PERCENT:
+            pass
+        elif self.op == CalcOperations.SUM:
+            result = self.operand + self.operand2
+        elif self.op == CalcOperations.SUBTRACTION:
+            result = self.operand - self.operand2
+        elif self.op == CalcOperations.MULTIPLICATION:
+            result = self.operand * self.operand2
+        elif self.op == CalcOperations.DIVISION:
+            result = self.operand / self.operand2
+        self.display(result)
+
+    def change_op(self, op: CalcOperations):
+        self.op = op
+        if self.wait_operand:
+            self.operand = self.lcdDisplay.value()
+            self.wait_operand = False
+        elif self.wait_operand2:
+            self.operand2 = self.lcdDisplay.value()
+            self.wait_operand2 = False
+        if not self.wait_operand and not self.wait_operand2:
+            self.calculate()
+            self.operand = self.lcdDisplay.value()
+            self.wait_operand2 = True
+        self.blink_lcd()
 
     def btn_equal_clicked(self):
         self.log.info("Clicked: =")
-        if self.waiting_digit:
+        if self.wait_operand:
+            self.operand = self.lcdDisplay.value()
+            self.operand2 = self.last_operand
+        elif self.wait_operand2:
             self.operand2 = self.lcdDisplay.value()
-        else:
-            self.operand2 = float(self.display_text) if self.display_text else self.operand2
         self.calculate()
-        self.operand = self.accumulated
-        self.display_text = ''
+        self.soft_reset()
+        self.blink_lcd()
 
     def btn_ac_clicked(self):
         self.log.info("Clicked: AC")
-        self.operand = 0
-        self.operand2 = 0
-        self.display_text = '0'
-        self.accumulated = 0
-        self.waiting_digit = True
-        self.op = CalcOperations.NO_OP
-        self.lcdDisplay.setDigitCount(8)
+        self.lcdDisplay.setDigitCount(MIN_DIGITS)
         self.display(0)
+        self.soft_reset()
+        self.blink_lcd()
 
     def btn_signal_clicked(self):
         self.log.info("Clicked: +-")
@@ -147,10 +175,6 @@ class MainUi(QtView):
     def btn_percent_clicked(self):
         self.log.info("Clicked: %")
         self.change_op(CalcOperations.PERCENT)
-
-    def percent(self):
-        percent = lambda part, whole: float(whole) / 100 * float(part)
-        return percent(self.operand, self.operand2)
 
     def btn_division_clicked(self):
         self.log.info("Clicked: /")
@@ -211,7 +235,5 @@ class MainUi(QtView):
     def btn_comma_clicked(self):
         self.log.info("Clicked: ,")
         if DECIMAL_SEPARATOR not in self.display_text:
-            self.display_text += DECIMAL_SEPARATOR
-        if self.accumulated:
-            self.display_text = '0.'
-        self.lcdDisplay.display(self.display_text)
+            self.display_text += DECIMAL_SEPARATOR if self.display_text else '0' + DECIMAL_SEPARATOR
+        self.display(self.display_text)
